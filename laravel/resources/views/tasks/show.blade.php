@@ -1,95 +1,50 @@
 @extends('layouts.app')
 
-@section('title', 'View Task - TaskFlow')
-@section('page-title', 'Task Details')
+@section('title', 'Task Details')
 
 @section('content')
 
-<div class="detail-container">
+    <h2>Task Details</h2>
 
-    <div class="detail-top">
-
-        <div>
-
-            <span class="status {{ strtolower($task->status) }}">
+    <table>
+        <tr>
+            <th>Task Name</th>
+            <td>{{ $task->task_name }}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{ $task->description ?: 'No description provided.' }}</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td class="{{ $task->status === 'Completed' ? 'status-completed' : 'status-pending' }}">
                 {{ $task->status }}
-            </span>
+            </td>
+        </tr>
+        <tr>
+            <th>Due Date</th>
+            <td>
+                {{ $task->due_date ? $task->due_date->format('M d, Y') : 'No due date' }}
+                @if ($task->isOverdue())
+                    <br><small style="color:red;">Overdue</small>
+                @endif
+            </td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td>{{ $task->created_at->format('M d, Y') }}</td>
+        </tr>
+    </table>
 
-            <p class="task-number">
-                TASK #{{ $task->id }}
-            </p>
+    <br>
 
-            <h2>{{ $task->task_name }}</h2>
+    <a href="{{ route('tasks.edit', $task) }}" class="btn-add">Edit</a>
+    <a href="{{ route('tasks.index') }}">Back to Task List</a>
 
-        </div>
-
-        <a href="{{ route('tasks.edit', $task) }}" class="edit-large">
-            Edit Task
-        </a>
-
-    </div>
-
-    <div class="detail-section">
-
-        <span class="detail-label">
-            DESCRIPTION
-        </span>
-
-        <p class="detail-description">
-            {{ $task->description ?: 'No description provided.' }}
-        </p>
-
-    </div>
-
-    <div class="detail-information">
-
-        <div>
-            <span class="detail-label">STATUS</span>
-
-            <strong>
-                {{ $task->status }}
-            </strong>
-        </div>
-
-        <div>
-            <span class="detail-label">DUE DATE</span>
-
-            <strong>
-                {{ $task->due_date ? $task->due_date->format('F d, Y') : 'No due date' }}
-            </strong>
-        </div>
-
-        <div>
-            <span class="detail-label">CREATED</span>
-
-            <strong>
-                {{ $task->created_at->format('F d, Y') }}
-            </strong>
-        </div>
-
-    </div>
-
-    <div class="detail-bottom">
-
-        <a href="{{ route('tasks.index') }}" class="cancel-button">
-            ← Back to Tasks
-        </a>
-
-        <form action="{{ route('tasks.destroy', $task) }}"
-              method="POST"
-              onsubmit="return confirm('Are you sure you want to delete this task?');">
-
-            @csrf
-            @method('DELETE')
-
-            <button type="submit" class="delete-large">
-                Delete Task
-            </button>
-
-        </form>
-
-    </div>
-
-</div>
+    <form method="POST" action="{{ route('tasks.destroy', $task) }}" class="inline" onsubmit="return confirm('Are you sure you want to delete this task?');" style="margin-top:10px;">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-delete">Delete Task</button>
+    </form>
 
 @endsection
