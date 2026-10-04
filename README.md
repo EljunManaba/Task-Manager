@@ -70,3 +70,8 @@ Then open the link it gives you, it will redirect straight to the tasks page.
 
 - I used SQLite so I didn't have to set up a separate database server.
 - If you're running this in GitHub Codespaces, make sure `APP_URL` in `.env` matches the forwarded URL of your codespace, or the links and CSS won't load properly.
+
+The pictures below are the screenshots of my Task Manager
+![alt text](ss1.png)
+![alt text](ss2.png)
+![alt text](ss3.png)
